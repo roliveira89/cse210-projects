@@ -7,7 +7,9 @@ namespace JournalApp
     class Program
     {
         static List<Entry> journal = new List<Entry>();
+        // List that holds all the journal entries created by the user
         static List<string> prompts = new List<string> {
+            // Randomly displayed prompts to the user when creating a new entry
             "What was the best thing that happened today?",
             "What was the most challenging thing you faced today?",
             "How did I see the hand of the Lord in my life today?",
@@ -61,11 +63,15 @@ namespace JournalApp
         static void WriteNewEntry()
         {
             Console.WriteLine("New Entry:");
+            // Prompt user with a random prompt from the list
             string _prompt = GetRandomPrompt();
             Console.WriteLine("Prompt: " + _prompt);
             Console.Write("Response: ");
+            // Register the answer
             string _response = Console.ReadLine();
+            // Create a new entry object with info about the prompt, answer, date and time
             Entry _entry = new Entry(_prompt, _response, DateTime.Now);
+            // Add the entry to the journal list
             journal.Add(_entry);
         }
 
@@ -79,6 +85,7 @@ namespace JournalApp
             {
                 foreach (Entry entry in journal)
                 {
+                    // Convert object to string (suitable to display)
                     Console.WriteLine(entry.ToString());
                     Console.WriteLine();
                 }
@@ -87,15 +94,19 @@ namespace JournalApp
 
         static void SaveJournal()
         {
+            // Prompt user for a filename
             Console.Write("Enter a filename to save the journal to: ");
             string filename = Console.ReadLine();
 
             try
             {
+                // Create a new file and write text to it
                 using (StreamWriter writer = new StreamWriter(filename))
                 {
+                    // Write all the entries in the journal list to a file
                     foreach (Entry entry in journal)
                     {
+                        // Format data as a string
                         writer.WriteLine(entry.ToFileString());
                     }
                 }
@@ -110,25 +121,34 @@ namespace JournalApp
 
         static void LoadJournal()
         {
+            // Prompt user for a filename
             Console.Write("Enter a filename to load the journal from: ");
             string filename = Console.ReadLine();
 
             try
             {
+                // Create a new list to hold the entries loaded from the chosen file
                 List<Entry> newJournal = new List<Entry>();
+                // Read line by line of the file
                 using (StreamReader reader = new StreamReader(filename))
                 {
                     string _line;
                     while ((_line = reader.ReadLine()) != null)
                     {
+                        // Split each line into 3 parts
                         string[] parts = _line.Split('|');
+                        // Check if the line contains three parts, which is
+                        // the expected number of parts for a valid entry
                         if (parts.Length == 3)
                         {
+                            // Extract the prompt, response, and date values from the parts
                             string _prompt = parts[0];
                             string _response = parts[1];
                             DateTime _date;
                             if (DateTime.TryParse(parts[2], out _date))
                             {
+                                // Create a new entry object from the extracted values and adds it to the
+                                // newJournal list, replacing the actual journal with the one from the filename
                                 Entry entry = new Entry(_prompt, _response, _date);
                                 newJournal.Add(entry);
                             }
@@ -148,6 +168,7 @@ namespace JournalApp
         static string GetRandomPrompt()
         {
             Random random = new Random();
+            // Generates a random integer between 0 and the number of prompts in the prompts list minus 1
             int _index = random.Next(prompts.Count);
             return prompts[_index];
         }
@@ -155,6 +176,7 @@ namespace JournalApp
 
 class Entry
 {
+    // Class entry has 3 properties (prompt, response, date)
     public string Prompt { get; }
     public string Response { get; }
     public DateTime Date { get; }
@@ -166,6 +188,7 @@ class Entry
         Date = date;
     }
 
+    // This method returns a formatted string representation of the entry
     public override string ToString()
     {
         return "Date: " + Date.ToString("MM/dd/yyyy") + Environment.NewLine +
@@ -174,7 +197,9 @@ class Entry
     }
 
     public string ToFileString()
+    // Returns a string representation of the entry in a format that can be used to save the entry to a file
     {
+        // Returns the concatenated prompt as a string of the format:
         return Prompt + "|" + Response + "|" + Date.ToString("MM/dd/yyyy");
     }
 }
