@@ -8,19 +8,11 @@ namespace JournalApp
     {
         static List<Entry> journal = new List<Entry>();
         // List that holds all the journal entries created by the user
-        static List<string> prompts = new List<string> {
-            // Randomly displayed prompts to the user when creating a new entry
-            "What was the best thing that happened today?",
-            "What was the most challenging thing you faced today?",
-            "How did I see the hand of the Lord in my life today?",
-            "What did you learn today?",
-            "What are you grateful for today?",
-            "If I had one thing I could do over today, what would it be?",
-            "What is something you want to improve on?"
-        };
 
         static void Main(string[] args)
         {
+            GetPrompt promptGenerator = new GetPrompt();
+            
             bool exit = false;
             while (!exit)
             {
@@ -38,7 +30,8 @@ namespace JournalApp
                 switch (_choice)
                 {
                     case "1":
-                        WriteNewEntry();
+                        // Generate a prompt for the new entry
+                        WriteNewEntry(promptGenerator);
                         break;
                     case "2":
                         DisplayJournal();
@@ -60,11 +53,12 @@ namespace JournalApp
             }
         }
 
-        static void WriteNewEntry()
+        static void WriteNewEntry(GetPrompt promptGenerator)
+        // Use GetPrompt class as a parameter to generate the prompt for the new entry.
         {
             Console.WriteLine("New Entry:");
             // Prompt user with a random prompt from the list
-            string _prompt = GetRandomPrompt();
+            string _prompt = promptGenerator.GetRandomPrompt();
             Console.WriteLine("Prompt: " + _prompt);
             Console.Write("Response: ");
             // Register the answer
@@ -164,43 +158,5 @@ namespace JournalApp
                 Console.WriteLine("Error loading journal: " + ex.Message);
             }
         }
-
-        static string GetRandomPrompt()
-        {
-            Random random = new Random();
-            // Generates a random integer between 0 and the number of prompts in the prompts list minus 1
-            int _index = random.Next(prompts.Count);
-            return prompts[_index];
-        }
     }
-
-class Entry
-{
-    // Class entry has 3 properties (prompt, response, date)
-    public string Prompt { get; }
-    public string Response { get; }
-    public DateTime Date { get; }
-
-    public Entry(string prompt, string response, DateTime date)
-    {
-        Prompt = prompt;
-        Response = response;
-        Date = date;
-    }
-
-    // This method returns a formatted string representation of the entry
-    public override string ToString()
-    {
-        return "Date: " + Date.ToString("MM/dd/yyyy") + Environment.NewLine +
-            "Prompt: " + Prompt + Environment.NewLine +
-            "Response: " + Response;
-    }
-
-    public string ToFileString()
-    // Returns a string representation of the entry in a format that can be used to save the entry to a file
-    {
-        // Returns the concatenated prompt as a string of the format:
-        return Prompt + "|" + Response + "|" + Date.ToString("MM/dd/yyyy");
-    }
-}
 }
