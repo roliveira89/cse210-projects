@@ -16,7 +16,7 @@ abstract class Goal
         _Points = 0;
     }
 
-    // Overrides the base implementation and eturns a string representation of the goal
+    // Overrides the base implementation and returns a string representation of the goal
     public override string ToString()
     {
         return $"Title: {_Title}\nDescription: {_Description}\nIsCompleted: {_IsCompleted}\nPoints: {_Points}";
