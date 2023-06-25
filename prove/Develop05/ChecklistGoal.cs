@@ -36,7 +36,7 @@ class ChecklistGoal : Goal
         return checklistGoal;
     }
 
-    public void CompleteGoal(ref int points) // 
+    public void CompleteGoal(ref int points)
     {
         _Completed++; // Adds 1 to the counter to indicate that the goal has been completed once
         if (_Completed >= _Required)
