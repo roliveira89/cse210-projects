@@ -5,7 +5,7 @@ public class Resume
     // Make sure to initialize your list to a new List before you use it.
     public List<Job> _jobs = new List<Job>();
 
-    //public void DisplayResumeDetails()
+    // public void DisplayResumeDetails()
     public void Display()
     {
         Console.WriteLine($"Name: {_name}");
