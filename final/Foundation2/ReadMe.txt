@@ -1,0 +1,2 @@
+Scenario
+You have been hired to help a company with their product ordering system. They sell many products online to a variety of customers and need to produce packing labels, shipping labels, and compute final prices for billing.
